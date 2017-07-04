@@ -5,5 +5,9 @@ module.exports= {
     getView: function (req, res) {
         res.render('', { title: 'Express' });
 
+    },
+    viewJson: function (req, res) {
+        res.json({name:'yes'});
+
     }
 };
