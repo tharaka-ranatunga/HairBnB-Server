@@ -4,7 +4,7 @@ var index = require('../controllers/mainController');
 /* GET home page. */
 
 router.get('/',index.getView);
-router.get('/test',index.viewJson);
+router.post('/test',index.viewJson);
 
 
 module.exports = router;
