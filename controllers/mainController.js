@@ -6,12 +6,7 @@ var passwordHash = require('password-hash')
 
 var password = passwordHash.generate('encrypted')
 
-var post  = {
-    firstname:'Demian',
-    lastname:'Martin',
-    email:'demianmartin@gmail.com',
-    password:password
-};
+
 
 module.exports= {
     getView: function (req, res) {
@@ -23,6 +18,12 @@ module.exports= {
 
     },
     insert: function(req,res){
+        var post  = {
+            firstname:req.body.first,
+            lastname:req.body.last,
+            email:req.body.email,
+            password: req.body.password
+        };
         user.insertUser(function (name) {
             return res.json({message:name});
         },post);
