@@ -1,13 +1,30 @@
 /**
  * Created by tharaka_ra on 7/4/2017.
  */
-var sequelize = require('../dbconnect');
-var user = require('../models/user');
+var sequelize = require('sequelize');
+var connection = require('../dbconnect');
+var user = require('../models/user')
+
+
+
+// connection.authenticate().then(() => {console.log('Connection has been established successfully.');}).catch(err => {console.error('Unable to connect to the database:', err);});
+
+// var user = connection.define('user', {
+//     first_name: sequelize.STRING,
+//     last_name: sequelize.STRING,
+//     email: sequelize.STRING,
+//     password: sequelize.STRING
+// }, {
+//     classMethods: {
+//         associate: function(models) {
+//             // associations can be defined here
+//         }
+//     }
+// });
 var passwordHash = require('password-hash');
 
 
 var password = passwordHash.generate('encrypted');
-
 
 
 module.exports= {
@@ -32,21 +49,11 @@ module.exports= {
     //
     // },
     insert : function(req, res) {
-        sequelize.sync().then(function(err) {
-            //insert new user
-            user.create({
-                first_name:'d',
-                last_name:'d',
-                email:'s',
-                password: 's'
-            }).success(function(user) {
-                //you can now access the newly created user via the variable user
-                console.log(user);
-                res.send(user);
-            }).catch(function(err){
-                console.log('Error occured: ', err);
-            });
-        });
+        connection.sync().then(function(){
+            user(connection,sequelize).create({ first_name: req.body.first, last_name: req.body.last,email: req.body.email, password: req.body.password })
+
+        })
+
     }
 
 };
