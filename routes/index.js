@@ -6,8 +6,8 @@ var index = require('../controllers/mainController');
 
 router.get('/',index.getView);
 router.post('/test',index.viewJson);
+router.post('/insert', index.insert);
 
-
-router.post('/insert',index.insert);
+// router.post('/insert',index.insert);
 
 module.exports = router;
