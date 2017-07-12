@@ -2,7 +2,7 @@
  * Created by tharaka_ra on 7/4/2017.
  */
 var sequelize = require('sequelize');
-// var connection = require('../dbconnect');
+var connection = require('../dbconnect');
 // var user = require('../models/user')
 var model = require('../models')
 
@@ -70,7 +70,7 @@ module.exports= {
                 console.log('Error occured: ', err);
                 return res.json({error : "Server error occurred", status : "fail"});
             });
-        })
+        }
 
     }
 
