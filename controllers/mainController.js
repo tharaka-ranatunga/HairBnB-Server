@@ -2,8 +2,9 @@
  * Created by tharaka_ra on 7/4/2017.
  */
 var sequelize = require('sequelize');
-var connection = require('../dbconnect');
-var user = require('../models/user')
+// var connection = require('../dbconnect');
+// var user = require('../models/user')
+var model = require('../models')
 
 
 
@@ -50,8 +51,25 @@ module.exports= {
     // },
     insert : function(req, res) {
         connection.sync().then(function(){
-            user(connection,sequelize).create({ first_name: req.body.first, last_name: req.body.last,email: req.body.email, password: req.body.password })
-
+            model.user.findOrCreate({
+                where: {
+                    email: req.body.email
+                },
+                defaults: {
+                    first_name: req.body.first,
+                    last_name: req.body.last,
+                    email: req.body.email,
+                    password: req.body.password}
+            }).spread(function(user, created){
+                if(created){
+                    return res.json({status : "success"});
+                }
+                console.log('fail');
+                return res.json({error : "User already exist", status : "fail"});
+            }).catch(function(err){
+                console.log('Error occured: ', err);
+                return res.json({error : "Server error occurred", status : "fail"});
+            });
         })
 
     }
