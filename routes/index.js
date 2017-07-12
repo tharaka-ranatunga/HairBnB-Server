@@ -5,7 +5,6 @@ var index = require('../controllers/mainController');
 /* GET home page. */
 
 router.get('/',index.getView);
-router.post('/test',index.viewJson);
 router.post('/insert', index.insert);
 
 // router.post('/insert',index.insert);

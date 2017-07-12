@@ -33,10 +33,6 @@ module.exports= {
         res.render('', { title: 'Express' });
 
     },
-    viewJson: function (req, res) {
-        res.json({name:'yes'});
-
-    },
     // add: function(req,res){
     //     var post  = {
     //         firstname:req.body.first,
@@ -50,7 +46,7 @@ module.exports= {
     //
     // },
     insert : function(req, res) {
-        connection.sync().then(function(){
+        console.log(req.body.promotion);
             model.user.findOrCreate({
                 where: {
                     email: req.body.email
@@ -59,7 +55,11 @@ module.exports= {
                     first_name: req.body.first,
                     last_name: req.body.last,
                     email: req.body.email,
-                    password: req.body.password}
+                    password: req.body.password,
+                    promotion: req.body.promotion,
+                    role: req.body.role,
+
+                }
             }).spread(function(user, created){
                 if(created){
                     return res.json({status : "success"});
@@ -70,8 +70,5 @@ module.exports= {
                 console.log('Error occured: ', err);
                 return res.json({error : "Server error occurred", status : "fail"});
             });
-        }
-
     }
-
 };
