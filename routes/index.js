@@ -1,12 +1,21 @@
 var express = require('express');
 var router = express.Router();
-var index = require('../controllers/mainController');
+var mainC = require('../controllers/mainController');
+var userC = require('../controllers/userController');
+var passport = require('../middleware/passport');
 
 /* GET home page. */
 
-router.get('/',index.getView);
-router.post('/insert', index.insert);
+router.get('/',mainC.getView);
+router.post('/insert', userC.signup);
+router.post('/signin', userC.signin);
 
-// router.post('/insert',index.insert);
+router.post(
+    "/test",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        mainC.test(req,res);
+    }
+);
 
 module.exports = router;
