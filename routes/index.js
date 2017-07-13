@@ -7,7 +7,7 @@ var passport = require('../middleware/passport');
 /* GET home page. */
 
 router.get('/',mainC.getView);
-router.post('/insert', userC.signup);
+router.post('/signup', userC.signup);
 router.post('/signin', userC.signin);
 
 router.post(
