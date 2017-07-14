@@ -45,10 +45,11 @@ module.exports= {
             }
 
             if(passwordHash.verify(req.body.password,user.password)) {
+                var first_name = user.first_name;
                 var token = jwt.sign({email : user.email}, config.key,{
                     expiresIn: 60*60*24   //Token expire in 24 Hours
                 });
-                return res.status(200).send({email : email, token : token});
+                return res.status(200).send({first_name:first_name, email : email, token : token});
             }else{
                 return res.status(401).send("Invalid credentials");
             }
