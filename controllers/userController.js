@@ -41,7 +41,7 @@ module.exports= {
             }
         }).then(function(user){
             if(user==null){
-                return res.status(404).send("user not found");
+                return res.status(404).send("This email is not associated with any account");
             }
 
             if(passwordHash.verify(req.body.password,user.password)) {
@@ -50,7 +50,7 @@ module.exports= {
                 });
                 return res.status(200).send({email : email, token : token});
             }else{
-                return res.status(401).send("invalid credentials");
+                return res.status(401).send("Invalid credentials");
             }
         }).catch(function(err){
             return res.status(500).send("server error");
