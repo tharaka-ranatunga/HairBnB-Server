@@ -21,10 +21,6 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             required: true
         },
-        promotion: {
-            type: DataTypes.BOOLEAN,
-            required: true
-        },
         profilepic: {
             type: DataTypes.STRING,
             required: true

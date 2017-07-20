@@ -26,7 +26,7 @@ module.exports = {
             },
             location_id: {
                 type: Sequelize.INTEGER,
-                allowNull: true,
+                allowNull: false,
                 references: {
                     type: 'FOREIGN KEY',
                     model: "locations",
@@ -40,9 +40,6 @@ module.exports = {
             },
             profilebannerpic: {
                 type: Sequelize.STRING
-            },
-            promotion: {
-                type: Sequelize.BOOLEAN,
             },
             verify: {
                 allowNull: false,

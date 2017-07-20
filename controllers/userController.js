@@ -18,7 +18,11 @@ module.exports= {
                 lastname: req.body.last,
                 email: req.body.email,
                 password: passwordHash.generate(req.body.password),
-                promotion : req.body.promotion
+                location_id: 1,
+                profilepic : null,
+                profilebannerpic : null,
+                verify : false,
+                role_id : 2
 
 
             }
