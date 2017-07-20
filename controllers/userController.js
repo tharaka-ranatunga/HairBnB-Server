@@ -4,21 +4,22 @@
 var model = require('../models');
 var passwordHash = require('password-hash');
 var jwt = require('jsonwebtoken');
-var config = require('../config/config');
+var config = require('../config');
 
 module.exports= {
     signup : function(req, res) {
         model.user.findOrCreate({
+
             where: {
                 email: req.body.email
             },
             defaults: {
-                first_name: req.body.first,
-                last_name: req.body.last,
+                firstname: req.body.first,
+                lastname: req.body.last,
                 email: req.body.email,
                 password: passwordHash.generate(req.body.password),
-                promotion: req.body.promotion,
-                role: req.body.role,
+                promotion : req.body.promotion
+
 
             }
         }).spread(function(user, created){
@@ -45,11 +46,11 @@ module.exports= {
             }
 
             if(passwordHash.verify(req.body.password,user.password)) {
-                var first_name = user.first_name;
+                var first_name = user.firstname;
                 var token = jwt.sign({email : user.email}, config.key,{
                     expiresIn: 60*60*24   //Token expire in 24 Hours
                 });
-                return res.status(200).send({first_name:first_name, email : email, token : token});
+                return res.status(200).send({first_name:first_name, email : email, token : token, role: 1});
             }else{
                 return res.status(401).send("Invalid credentials");
             }

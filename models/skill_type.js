@@ -1,10 +1,10 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var role = sequelize.define('role', {
-    role_name: {
-        type: DataTypes.STRING,
-        required: true
-    }
+  var skill_type = sequelize.define('skill_type', {
+      skill_name: {
+        type:DataTypes.STRING,
+        required:true
+      }
   }, {
     classMethods: {
       associate: function(models) {
@@ -12,5 +12,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return role;
+  return skill_type;
 };
