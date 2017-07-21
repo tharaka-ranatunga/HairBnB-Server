@@ -81,6 +81,25 @@ module.exports = {
 
     },
 
+    getProfileStatus : function (req, res) {
+        var user_id = req.user.id;
+        models.user_role.findAll({
+            where: {
+                user_id: user_id
+            }
+        }).then(function(user_role){
+            //No match for given email address
+            if(user_role===null || user_role.length===0){
+                return res.status(404).json({error : "Profile Not found"});
+            }
+            return res.status(200).json({error : "Profile for user: " + user_id});
+        }).catch(function(err){
+            console.log('Error occurred: ', err);
+            return res.status(504).json({error : "Server error occurred"});
+        });
+    },
+
+
     getProfile : function (req, res) {
         var user_id = req.user.id;
         console.log(user_id);

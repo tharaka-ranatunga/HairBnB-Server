@@ -35,4 +35,16 @@ router.post(
     }
 );
 
+
+
+//Check weather user has a profile or not
+router.get(
+    "/getProfileStatus",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        profileC.getProfileStatus(req,res);
+    }
+);
+
+
 module.exports = router;
