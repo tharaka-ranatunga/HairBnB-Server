@@ -102,6 +102,7 @@ module.exports = {
 
     getProfile : function (req, res) {
         var user_id = req.user.id;
+        console.log("no found1")
         console.log(user_id);
         models.user_role.findAll({
             where: {
@@ -110,32 +111,57 @@ module.exports = {
         }).then(function(user_role){
             //No match for given email address
             if(user_role===null || user_role.length===0){
-                console.log('i am now here');
+                console.log("no found")
                 return res.status(404).json({error : "Profile Not found"});
             }
-            return res.status(200).json({error : "found", status : "fail"});
-            //Check the password with the hashed password
-            // if(hashPass.verify(password,user.password)) {
-            //     var token = jwt.sign({email : user.email}, config.secret,{
-            //         expiresIn: 60*60*24   //Token expire in 24 Hours
-            //     });
-            //     var varify_status=0;
-            //     if(user.verify){varify_status = 1;}
-            //     return res.json({
-            //         error: "Login Success",
-            //         status: "success",
-            //         firstname: user.firstname,
-            //         lastname: user.lastname,
-            //         verified: varify_status,
-            //         token: token,
-            //         email: email
-            //     });
-            // }
-            // //Unauthorized access
-            // return res.json({error : "Username or password is invalid", status : "fail"});
+            models.stylist.findOne(
+                {where: {user_id: user_id}}
+            ).then(function (stylist) {
+                var user_skills = [];
+                var user_jobtypes = [];
+                var user_jobtype_price = [];
+                models.user_skill.findAll({
+                    where: {
+                        user_id: stylist.dataValues.id
+                    }
+                }).then(function(user_skill){
+                    for (var i=0; i<user_skill.length; i++){user_skills.push(user_skill[i].dataValues.skill_id)}
+                }).catch(function(err){
+                    console.log('Error occurred: ', err);
+                    return res.status(504).json({error : "Server error occurred"});
+                });
+                models.user_jobtype.findAll({
+                    where: {
+                        user_id: stylist.dataValues.id
+                    }
+                }).then(function(user_jobtype){
+                    for (var i=0; i<user_jobtype.length; i++){
+                        user_jobtypes.push(user_jobtype[i].dataValues.job_id);
+                        user_jobtype_price.push(user_jobtype[i].dataValues.price);
+                    }
+                }).catch(function(err){
+                    console.log('Error occurred: ', err);
+                    return res.status(504).json({error : "Server error occurred"});
+                });
+                setTimeout(function () {
+                    return res.status(200).json(
+                        {price: user_jobtype_price,
+                            skills: user_skills,
+                            job_types: user_jobtypes,
+                            description: stylist.dataValues.description}
+                    );
+                },250);
+            }).catch(function(err){
+                console.log('Error occurred: ', err);
+                var a = {a:"asdasdasd"};
+                return res.status(504).json({error : "Server error occurred"},a);
+            });
         }).catch(function(err){
-            console.log('Error occured: ', err);
-            return res.json({error : "Server error occurred", status : "fail"});
+            console.log('Error occurred: ', err);
+            return res.status(504).json({error : "Server error occurred"});
         });
     }
+
+
+
 };

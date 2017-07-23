@@ -20,15 +20,16 @@ router.post(
 );
 
 router.get(
-    "/getProfile",
+    "/profile/getProfile",
     passport.authenticate('jwt', {session :false}),
     function (req,res) {
+        console.log("found");
         profileC.getProfile(req,res);
     }
 );
 
 router.post(
-    "/createProfile",
+    "/profile/createProfile",
     passport.authenticate('jwt', {session :false}),
     function (req,res) {
         profileC.createProfile(req,res);
@@ -39,7 +40,7 @@ router.post(
 
 //Check weather user has a profile or not
 router.get(
-    "/getProfileStatus",
+    "/profile/getProfileStatus",
     passport.authenticate('jwt', {session :false}),
     function (req,res) {
         profileC.getProfileStatus(req,res);
