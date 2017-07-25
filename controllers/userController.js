@@ -4,7 +4,7 @@
 var model = require('../models');
 var passwordHash = require('password-hash');
 var jwt = require('jsonwebtoken');
-var config = require('../config');
+const config = require('../config');
 
 module.exports= {
     signup : function(req, res) {
@@ -37,29 +37,52 @@ module.exports= {
         });
     },
 
-    signin : function(req, res) {
-        var email = req.body.email;
-        var password = req.body.password;
-        model.user.findOne({
-            where: {
-                email: email
-            }
-        }).then(function(user){
-            if(user==null){
+    signin : async function(req, res) {
+        let email = req.body.email;
+        let password = req.body.password;
+
+        try {
+            let user = await model.user.findOne({
+                where: {
+                    email: email
+                }
+            });
+            if (user == null) {
                 return res.status(404).send("This email is not associated with any account");
             }
-
-            if(passwordHash.verify(req.body.password,user.password)) {
+            if (passwordHash.verify(req.body.password, user.password)) {
                 var first_name = user.firstname;
-                var token = jwt.sign({email : user.email}, config.key,{
-                    expiresIn: 60*60*24   //Token expire in 24 Hours
+                var token = jwt.sign({email: user.email}, config.key, {
+                    expiresIn: 60 * 60 * 24   //Token expire in 24 Hours
                 });
-                return res.status(200).send({first_name:first_name, email : email, token : token, role: 1});
-            }else{
+                return res.status(200).send({first_name: first_name, email: email, token: token, role: 1});
+            } else {
                 return res.status(401).send("Invalid credentials");
             }
-        }).catch(function(err){
+        }catch(err){
             return res.status(500).send("server error");
-        });
+        }
+
+        // model.user.findOne({
+        //     where: {
+        //         email: email
+        //     }
+        // }).then(function(user){
+        //     if(user==null){
+        //         return res.status(404).send("This email is not associated with any account");
+        //     }
+        //
+        //     if(passwordHash.verify(req.body.password,user.password)) {
+        //         var first_name = user.firstname;
+        //         var token = jwt.sign({email : user.email}, config.key,{
+        //             expiresIn: 60*60*24   //Token expire in 24 Hours
+        //         });
+        //         return res.status(200).send({first_name:first_name, email : email, token : token, role: 1});
+        //     }else{
+        //         return res.status(401).send("Invalid credentials");
+        //     }
+        // }).catch(function(err){
+        //     return res.status(500).send("server error");
+        // });
     },
 };

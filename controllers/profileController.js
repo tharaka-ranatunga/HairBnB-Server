@@ -102,7 +102,6 @@ module.exports = {
 
     getProfile : function (req, res) {
         var user_id = req.user.id;
-        console.log("no found1")
         console.log(user_id);
         models.user_role.findAll({
             where: {
@@ -111,7 +110,6 @@ module.exports = {
         }).then(function(user_role){
             //No match for given email address
             if(user_role===null || user_role.length===0){
-                console.log("no found")
                 return res.status(404).json({error : "Profile Not found"});
             }
             models.stylist.findOne(
