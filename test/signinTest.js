@@ -14,10 +14,28 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('check for correct user info', function () {
+describe('Signin', function () {
     model.user.findOne = sinon.stub().returns({email:'tharaka.kamal@gmail.com', password:'sha1$cf0a2579$1$e52f3d174e1ea35ae6b291b9ae7a697cc6579b1e', first_name:'Tharaka'})
 
-    it('should return correct status', async function () {
+    it('should return status 200 on correct credentials', async function () {
+        const request = {
+            body:{
+                email : 'tharaka.kamal@gmail.com',
+                password : '111111'
+            }
+        };
+        let statusStub = sinon.stub().returnsThis();
+        let spyStub = sinon.spy();
+        let response = {
+            status:statusStub,
+            json : spyStub
+        };
+
+        await userController.signin(request,response);
+        assert.equal(statusStub.calledWith(200), true);
+    })
+
+    it('should return user info on correct credentials', async function () {
         const request = {
             body:{
                 email : 'tharaka.kamal@gmail.com',
@@ -33,14 +51,12 @@ describe('check for correct user info', function () {
 
         await userController.signin(request,response);
         let firstCall = response.json.args[0][0];
-        assert.equal(statusStub.calledWith(200), true);
+        expect(firstCall).to.have.property('email');
+        expect(firstCall).to.have.property('first_name');
+        expect(firstCall).to.have.property('token');
     })
-});
 
-describe('check for incorrect user info', function () {
-    model.user.findOne = sinon.stub().returns({email:'tharaka.kamal@gmail.com', password:'sha1$cf0a2579$1$e52f3d174e1ea35ae6b291b9ae7a697cc6579b1e', first_name:'Tharaka'})
-
-    it('should return unauthorized', async function () {
+    it('should return status 401 on incorrect credentials', async function () {
         const request = {
             body:{
                 email : 'tharaka.kamal@gmail.com',
@@ -56,8 +72,31 @@ describe('check for incorrect user info', function () {
 
         await userController.signin(request,response);
         assert.equal(statusStub.calledWith(401), true);
+        assert.equal()
+    })
+
+    it('should return status 404 on invalid email', async function ()
+    {
+        model.user.findOne = sinon.stub().returns()
+        const request = {
+            body:{
+                email : 'tharaka.kamal@gmail.com',
+                password : '11111'
+            }
+        };
+        let statusStub = sinon.stub().returnsThis();
+        let spyStub = sinon.spy();
+        let response = {
+            status:statusStub,
+            json : spyStub
+        };
+
+        await userController.signin(request,response);
+        assert.equal(statusStub.calledWith(404), true);
     })
 });
+
+
 
 
 // describe('check for correct user info',function () {
