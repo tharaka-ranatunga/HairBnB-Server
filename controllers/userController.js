@@ -1,17 +1,22 @@
 /**
  * Created by tharaka_ra on 7/13/2017.
  */
-var model = require('../models');
-var passwordHash = require('password-hash');
-var jwt = require('jsonwebtoken');
+const model = require('../models');
+const passwordHash = require('password-hash');
+const jwt = require('jsonwebtoken');
 const config = require('../config');
+const emailValidator = require('email-validator');
 
 module.exports= {
-    signup : function(req, res) {
-        model.user.findOrCreate({
+    signup : async function(req, res) {
+        let email = req.body.email;
+        if(!emailValidator.validate(email)){
+            return res.status(400).json({error:"Email not valid"})
+        }
+        let user = await model.user.findOrCreate({
 
             where: {
-                email: req.body.email
+                email: email
             },
             defaults: {
                 firstname: req.body.first,
@@ -26,29 +31,30 @@ module.exports= {
 
 
             }
-        }).spread(function(user, created){
-            if(created){
-                return res.json({status : "success"});
-            }
-            console.log('fail');
-            return res.json({error : "User already exist", status : "fail"});
-        }).catch(function(err){
-            return res.status(500);
         });
+        if(user[1]){
+            return res.status(200).json({message : "Success"});
+        }else{
+            return res.status(409).json({error : "User already exist"})};
     },
 
-        signin : async function(req, res) {
+    signin : async function(req, res) {
             let email = req.body.email;
             let password = req.body.password;
 
             try {
+                if(!emailValidator.validate(email)){
+                    return res.status(400).json({error:"Email not valid"})
+                }
+
                 let user = await model.user.findOne({
                     where: {
                         email: email
                     }
                 });
+
                 if (user == null) {
-                    return res.status(404).send("This email is not associated with any account");
+                    return res.status(400).send("This email is not associated with any account");
                 }
                 if (passwordHash.verify(req.body.password, user.password)) {
                     var first_name = user.firstname;
@@ -64,11 +70,10 @@ module.exports= {
                             }
                     );
                 } else {
-                    // return res.status(401).send("Invalid credentials");
                     return res.status(401).json({error :"Invalid credentials"});
                 }
             }catch(err){
-                return res.status(500).json({error : "server error"});
+                return res.status(500).json({error : "Server error"});
             }
 
         // model.user.findOne({

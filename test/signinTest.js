@@ -75,7 +75,7 @@ describe('Signin', function () {
         assert.equal()
     })
 
-    it('should return status 404 on invalid email', async function ()
+    it('should return status 400 on invalid email', async function ()
     {
         model.user.findOne = sinon.stub().returns()
         const request = {
@@ -92,7 +92,26 @@ describe('Signin', function () {
         };
 
         await userController.signin(request,response);
-        assert.equal(statusStub.calledWith(404), true);
+        assert.equal(statusStub.calledWith(400), true);
+    })
+
+    it('should validate email address', async function ()
+    {
+        const request = {
+            body:{
+                email : 'tharaka.kamal',
+                password : '11111'
+            }
+        };
+        let statusStub = sinon.stub().returnsThis();
+        let spyStub = sinon.spy();
+        let response = {
+            status:statusStub,
+            json : spyStub
+        };
+
+        await userController.signin(request,response);
+        assert.equal(statusStub.calledWith(400), true);
     })
 });
 
