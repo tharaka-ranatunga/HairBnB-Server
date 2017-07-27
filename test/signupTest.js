@@ -12,6 +12,7 @@ const should = chai.should();
 const assert = chai.assert;
 const expect = chai.expect;
 
+
 chai.use(chaiHttp);
 
 describe('Signup', function () {
@@ -24,7 +25,7 @@ describe('Signup', function () {
                 first : 'Tharaka',
                 last : 'Ranatunga',
                 email : 'tharaka.kamal@gmail.co',
-                password : '111111'
+                password : 'Aa111111'
             }
         };
         let statusStub = sinon.stub().returnsThis();
@@ -57,6 +58,26 @@ describe('Signup', function () {
         await userController.signup(request,response);
         assert.equal(statusStub.calledWith(400), true);
     });
+    it('should validate password', async function ()
+    {
+        const request = {
+            body:{
+                first : 'Tharaka',
+                last : 'Ranatunga',
+                email : 'tharaka.kamal@gmail.com',
+                password : '111111'
+            }
+        };
+        let statusStub = sinon.stub().returnsThis();
+        let spyStub = sinon.spy();
+        let response = {
+            status:statusStub,
+            json : spyStub
+        };
+
+        await userController.signup(request,response);
+        assert.equal(statusStub.calledWith(400), true);
+    });
     it('should return status 200 on success', async function ()
             {
         model.user.findOrCreate = sinon.stub().returns([{user:{email:'tharaka.kamal@gmail.com'}},true]);
@@ -65,7 +86,7 @@ describe('Signup', function () {
                 first : 'Tharaka',
                 last : 'Ranatunga',
                 email : 'tharaka.kamal@gmail.com',
-                password : '111111'
+                password : 'aA111111'
             }
         };
         let statusStub = sinon.stub().returnsThis();

@@ -6,12 +6,29 @@ const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const emailValidator = require('email-validator');
+const passwordValidator = require('password-validator');
+// Create a schema
+
 
 module.exports= {
     signup : async function(req, res) {
+        let schema = new passwordValidator();
+        schema
+            .is().min(5)                                    // Minimum length 8
+            .is().max(100)                                  // Maximum length 100
+            .has().uppercase()                              // Must have uppercase letters
+            .has().lowercase()                              // Must have lowercase letters
+            .has().digits()                                 // Must have digits
+            .has().not().spaces()                           // Should not have spaces
+            .is().not().oneOf(['Passw0rd', 'Password123']);
+
         let email = req.body.email;
+        let password = req.body.password;
         if(!emailValidator.validate(email)){
             return res.status(400).json({error:"Email not valid"})
+        }
+        if(!schema.validate(password)){
+            return res.status(400).json({error:"Password not valid"})
         }
         let user = await model.user.findOrCreate({
 
@@ -22,7 +39,7 @@ module.exports= {
                 firstname: req.body.first,
                 lastname: req.body.last,
                 email: req.body.email,
-                password: passwordHash.generate(req.body.password),
+                password: passwordHash.generate(password),
                 location_id: 1,
                 profilepic : null,
                 profilebannerpic : null,
