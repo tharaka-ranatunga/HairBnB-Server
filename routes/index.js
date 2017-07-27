@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mainC = require('../controllers/mainController');
 var userC = require('../controllers/userController');
+var searchC = require('../controllers/searchController');
 var profileC = require('../controllers/profileController');
 var passport = require('../middleware/passport');
 
@@ -10,6 +11,7 @@ var passport = require('../middleware/passport');
 router.get('/',mainC.getView);
 router.post('/signup', userC.signup);
 router.post('/signin', userC.signin);
+router.get('/search', searchC.getSimpleSearchResults);
 
 router.post(
     "/test",

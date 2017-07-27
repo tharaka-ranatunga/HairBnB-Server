@@ -52,7 +52,7 @@ module.exports= {
         if(user[1]){
             return res.status(200).json({message : "Success"});
         }else{
-            return res.status(409).json({error : "User already exist"})};
+            return res.status(409).json({error : "User already exist"})}
     },
 
     signin : async function(req, res) {
@@ -71,7 +71,7 @@ module.exports= {
                 });
 
                 if (user == null) {
-                    return res.status(400).send("This email is not associated with any account");
+                    return res.status(400).send({error :"This email is not associated with any account" });
                 }
                 if (passwordHash.verify(req.body.password, user.password)) {
                     var first_name = user.firstname;
