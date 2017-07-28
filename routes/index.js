@@ -38,6 +38,7 @@ router.post(
     }
 );
 
+router.route('/profile/getProfilePublic').get(profileC.getProfilePublic);
 
 
 //Check weather user has a profile or not
