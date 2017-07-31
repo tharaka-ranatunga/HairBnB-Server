@@ -50,7 +50,22 @@ module.exports= {
             }
         });
         if(user[1]){
-            return res.status(200).json({message : "Success"});
+            var first_name = user[0].firstname;
+            var user_id = user[0].id;
+            var last_name = user[0].lastname;
+            var token = jwt.sign({email: user[0].email}, config.key, {
+                expiresIn: 60 * 60 * 24   //Token expire in 24 Hours
+            });
+            return res.status(200).json(
+                {
+                    message : "Success",
+                    user_id : user_id,
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    token: token,
+                }
+                );
         }else{
             return res.status(409).json({error : "User already exist"})}
     },
@@ -75,15 +90,19 @@ module.exports= {
                 }
                 if (passwordHash.verify(req.body.password, user.password)) {
                     var first_name = user.firstname;
+                    var user_id = user.id;
+                    var last_name = user.lastname;
+                    console.log(last_name);
                     var token = jwt.sign({email: user.email}, config.key, {
                         expiresIn: 60 * 60 * 24   //Token expire in 24 Hours
                     });
                     return res.status(200).json(
                             {
+                                user_id : user_id,
                                 first_name: first_name,
+                                last_name: last_name,
                                 email: email,
                                 token: token,
-                                role: 1
                             }
                     );
                 } else {
