@@ -105,7 +105,6 @@ module.exports = {
                     }).then(function(arrStylists){
                         stylists.push(arrStylists);
                     }).catch(function(err){
-                        console.log('Error occurred: ', err);
                         return res.status(504).json({error : "Server error occurred"});
                     });
                 }
@@ -116,8 +115,7 @@ module.exports = {
                         }
                     }).then(function(user_jobtype){
                         user_jobtypes_arr.push(user_jobtype);
-                    }).catch(function(err){
-                        console.log('Error occurred: ', err);
+                    }).catch(function(err){;
                         return res.status(504).json({error : "Server error occurred"});
                     });
                 }
@@ -133,11 +131,9 @@ module.exports = {
                             }).then(function (arrUsers) {
                                 users.push(arrUsers);
                             }).catch(function (err) {
-                                console.log('Error occurred: ', err);
                                 return res.status(504).json({error: "Server error occurred"});
                             });
                         }catch (err){
-                            console.log('Error occurred: ', err);
                         }
                     }
                     setTimeout(function () {
@@ -149,7 +145,6 @@ module.exports = {
                     },250);
                 },300);
             }).catch(function(err){
-                console.log('Error occurred: ', err);
                 return res.status(504).json({error : "Server error occurred"});
             });
         }else if(typeof skill_id!=='undefined' && typeof type_id!=='undefined'){
@@ -169,7 +164,6 @@ module.exports = {
                     }).then(function(user_jobtype){
                         user_jobtypes_arr.push(user_jobtype);
                     }).catch(function(err){
-                        console.log('Error occurred: ', err);
                         return res.status(504).json({error : "Server error occurred"});
                     });
                 }
@@ -183,11 +177,9 @@ module.exports = {
                             }).then(function (arrStylists) {
                                 stylists.push(arrStylists);
                             }).catch(function (err) {
-                                console.log('Error occurred: ', err);
                                 return res.status(504).json({error: "Server error occurred"});
                             });
                         }catch (err){
-                            console.log('Error on getting query data');
                         }
                     }
                     setTimeout(function () {
@@ -200,7 +192,6 @@ module.exports = {
                             }).then(function(arrUsers){
                                 users.push(arrUsers);
                             }).catch(function(err){
-                                console.log('Error occurred: ', err);
                                 return res.status(504).json({error : "Server error occurred"});
                             });
                         }
@@ -214,7 +205,6 @@ module.exports = {
                     },300);
                 },250);
             }).catch(function(err){
-                console.log('Error occurred: ', err);
                 return res.status(504).json({error : "Server error occurred"});
             });
         }else{
