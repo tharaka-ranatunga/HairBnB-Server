@@ -12,6 +12,8 @@ router.get('/',mainC.getView);
 router.post('/signup', userC.signup);
 router.post('/signin', userC.signin);
 router.get('/search', searchC.getSimpleSearchResults);
+router.get('/dynamicsearch',searchC.getDynamicSearchResults);
+
 
 router.post(
     "/test",

@@ -36,7 +36,6 @@ module.exports = {
         var job_type = req.body.job_types;
         var pament_email = req.body.payment_email;
         var price_job_types = req.body.price_job_types;
-
         addProfileData(
             user_id,
             description,
@@ -55,7 +54,7 @@ module.exports = {
                     }
                     for(j=0; j<job_type.length; j++) {
                         models.user_jobtype.bulkCreate([
-                            {user_id: stylist_id, job_id: skills[j], price: price_job_types[j]}
+                            {user_id: stylist_id, job_id: job_type[j], price: price_job_types[j]}
                         ]).then(function (done) {
                             console.log('Jobtype insert success for user: ' + user_id + ' [Items: ' + j + ']');
                         }).catch(function (err) {
