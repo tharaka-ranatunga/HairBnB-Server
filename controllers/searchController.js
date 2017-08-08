@@ -167,6 +167,7 @@ module.exports = {
                         skill_id: skill_id
                     }
                 });
+
                 let stylists = [];
                 let user_jobtypes_arr = [];
                 for (let j = 0; j < user_skill.length; j++) {
@@ -247,6 +248,9 @@ module.exports = {
     getDynamicSearchResults : async function (req,res) {
         let jobtype = req.query.jobtype;
         let skilltype = req.query.skilltype;
+
+        console.log('job : ' + jobtype);
+        console.log('skill: ' + skilltype);
         let i = 0;  //Iterator for for-loop
 
         let jobtypeArr = [];
@@ -255,23 +259,27 @@ module.exports = {
         }else {
             jobtype = jobtype.split(',');
             for (i = 0; i < (jobtype.length); i++) {
-                jobtypeArr.push(parseInt(jobtype[i]) + 1);
+                jobtypeArr.push(parseInt(jobtype[i]));
             }
         }
 
         let skilltypeArr = [];
         if(skilltype==='all'){
-            for(let m=0; m<11; m++){jobtypeArr.push((m+1))}
+            for(let m=0; m<14; m++){jobtypeArr.push((m+1))}
         }else {
             skilltype = skilltype.split(',');
             for (i = 0; i < (skilltype.length); i++) {
-                skilltypeArr.push(parseInt(skilltype[i]) + 1);
+                skilltypeArr.push(parseInt(skilltype[i]));
             }
         }
 
-        let user_results_skills = await dynamicSearchSkills(skilltypeArr);
-        let user_results_types = await dynamicSearchTypes(jobtypeArr);
+        console.log(skilltypeArr);
+        console.log(jobtypeArr);
 
+        let user_results_skills = await dynamicSearchSkills(skilltypeArr);
+
+
+        let user_results_types = await dynamicSearchTypes(jobtypeArr);
         let dynamic_result_user = [];
         for(i=0; i<user_results_types.length; i++) {
             for (r = 0; r < user_results_skills.length; r++) {
