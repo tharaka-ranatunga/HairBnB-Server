@@ -4,6 +4,7 @@ var mainC = require('../controllers/mainController');
 var userC = require('../controllers/userController');
 var searchC = require('../controllers/searchController');
 var profileC = require('../controllers/profileController');
+var editC = require('../controllers/editController');
 var passport = require('../middleware/passport');
 
 /* GET home page. */
@@ -51,6 +52,24 @@ router.get(
         profileC.getProfileStatus(req,res);
     }
 );
+
+router.get(
+    "/profile/getEditProfile",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        editC.getEditProfile(req,res);
+    }
+);
+
+
+router.post(
+    "profile/updateProfile",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        editC.updateProfile(req,res);
+    }
+);
+
 
 
 module.exports = router;
