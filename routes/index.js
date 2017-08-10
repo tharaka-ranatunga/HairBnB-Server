@@ -63,7 +63,7 @@ router.get(
 
 
 router.post(
-    "profile/updateProfile",
+    "/profile/updateProfile",
     passport.authenticate('jwt', {session :false}),
     function (req,res) {
         editC.updateProfile(req,res);
