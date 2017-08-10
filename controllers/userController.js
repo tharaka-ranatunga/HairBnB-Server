@@ -14,7 +14,7 @@ module.exports= {
     signup : async function(req, res) {
         let schema = new passwordValidator();
         schema
-            .is().min(5)                                    // Minimum length 8
+            .is().min(6)                                    // Minimum length 6
             .is().max(100)                                  // Maximum length 100
             .has().uppercase()                              // Must have uppercase letters
             .has().lowercase()                              // Must have lowercase letters
